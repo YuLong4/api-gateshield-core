@@ -25,3 +25,5 @@ replay_pid*
 
 .idea/
 api-gateshield-core.iml
+
+.DS_Store
