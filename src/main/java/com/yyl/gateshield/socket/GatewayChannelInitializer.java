@@ -1,6 +1,7 @@
-package com.yyl.gateshield.session;
+package com.yyl.gateshield.socket;
 
-import com.yyl.gateshield.session.handlers.SessionServerHandler;
+import com.yyl.gateshield.session.defaults.DefaultGatewaySessionFactory;
+import com.yyl.gateshield.socket.handlers.GatewayServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -18,11 +19,11 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
  * 这个 SessionChannelInitializer 被设计用于初始化每个新创建的 SocketChannel 的管道，确保它们拥有正确的处理器以处理特定类型的数据流。
  * 通常, 会在 Netty 服务器端的启动过程中使用类似的初始化器来设置管道以正确处理传入的请求。
  */
-public class SessionChannelInitializer extends ChannelInitializer<SocketChannel> {
-    private final Configuration configuration;
+public class GatewayChannelInitializer extends ChannelInitializer<SocketChannel> {
+    private final DefaultGatewaySessionFactory gatewaySessionFactory;
 
-    public SessionChannelInitializer(Configuration configuration) {
-        this.configuration = configuration;
+    public GatewayChannelInitializer(DefaultGatewaySessionFactory gatewaySessionFactory) {
+        this.gatewaySessionFactory = gatewaySessionFactory;
     }
 
     @Override
@@ -31,6 +32,6 @@ public class SessionChannelInitializer extends ChannelInitializer<SocketChannel>
         pipeline.addLast(new HttpRequestDecoder());
         pipeline.addLast(new HttpResponseEncoder());
         pipeline.addLast(new HttpObjectAggregator(1024*1024));
-        pipeline.addLast(new SessionServerHandler(configuration));
+        pipeline.addLast(new GatewayServerHandler(gatewaySessionFactory));
     }
 }

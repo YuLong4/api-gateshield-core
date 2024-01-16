@@ -1,11 +1,12 @@
-package com.yyl.gateshield.session.handlers;
+package com.yyl.gateshield.socket.handlers;
 
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.yyl.gateshield.bind.IGenericReference;
-import com.yyl.gateshield.session.BaseHandler;
-import com.yyl.gateshield.session.Configuration;
+import com.yyl.gateshield.session.GatewaySession;
+import com.yyl.gateshield.session.defaults.DefaultGatewaySessionFactory;
+import com.yyl.gateshield.socket.BaseHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
@@ -14,20 +15,16 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 在 session 方法中，处理了收到的 FullHttpRequest 对象。这个方法的逻辑包括：
- * 使用日志记录器 LoggerFactory.getLogger(SessionServerHandler.class) 记录了接收到的请求的 URI 和 HTTP 方法。
- * 创建了一个 DefaultFullHttpResponse 对象作为响应，并设置了响应内容为指定的 JSON 数据。
- * 设置了响应的头部信息，包括内容类型、内容长度、连接保持等 HTTP 头部属性。
- * 随后使用 channel.writeAndFlush(response) 将响应写入到通道并刷新到远程对等体（客户端）。
+ * 会话处理服务器
  */
-public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
+public class GatewayServerHandler extends BaseHandler<FullHttpRequest> {
 
-    private final Logger logger = LoggerFactory.getLogger(SessionServerHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GatewayServerHandler.class);
 
-    private final Configuration configuration;
+    private final DefaultGatewaySessionFactory gatewaySessionFactory;
 
-    public SessionServerHandler(Configuration configuration) {
-        this.configuration = configuration;
+    public GatewayServerHandler(DefaultGatewaySessionFactory gatewaySessionFactory) {
+        this.gatewaySessionFactory = gatewaySessionFactory;
     }
 
     @Override
@@ -35,20 +32,20 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         logger.info("网关接收到请求 uri: {}, method: {}", request.uri(), request.method());
 
         //返回信息控制
-        String methodName = request.uri().substring(1);
-        if(methodName.equals("favicon.ico")){
+        String uri = request.uri();
+        if(uri.equals("favicon.ico")){
             return;
         }
+
+        GatewaySession gatewaySession = gatewaySessionFactory.openSession();
+        IGenericReference reference = gatewaySession.getMapper(uri);
+        String result = reference.$invoke("test") + " " + System.currentTimeMillis();
 
         //配置返回信息response
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
 
-        //服务泛化调用
-        IGenericReference reference = configuration.getGenericReference("sayHi");
-        String result = reference.$invoke("test") + " " + System.currentTimeMillis();
-
         //设置回写数据
-        response.content().writeBytes(JSON.toJSONBytes(result + request.uri(), SerializerFeature.PrettyFormat));
+        response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));
 
         //头部信息设置
         HttpHeaders headers = response.headers();

@@ -5,8 +5,8 @@ import io.netty.channel.Channel;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public interface IGenericReferenceSessionFactory {
+public interface GatewaySessionFactory {
 
-    Future<Channel> openSession() throws ExecutionException, InterruptedException;
+    GatewaySession openSession();
 
 }
