@@ -33,3 +33,28 @@ public class YourHandler extends SimpleChannelInboundHandler<String> {
 这个示例中，`YourHandler` 类继承了 `SimpleChannelInboundHandler`，并重写了 `channelRead0` 方法来处理收到的消息。泛型参数 `<String>` 表示处理的消息类型为字符串，你可以根据实际情况替换成相应的消息类型。
 
 在使用这个处理器的时候，确保正确处理异常情况，就像 `exceptionCaught` 方法中展示的那样。你可以根据需要记录异常日志、关闭通道或者执行其他适当的操作。
+
+
+
+
+
+# 2.docker
+
+1.Portioner
+
+```
+docker pull portainer/portainer Using default tag: latest
+
+docker run -d --restart=always --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+```
+
+2.zookeeper
+
+```
+docker pull zookeeper:3.4.13
+
+docker run --name my-zookeeper -p 2181:2181 -d zookeeper:3.4.13
+添加自定义的配置文件zoo.cfg
+docker run -d -p 2181:2181 --name my-zookeeper -v /Users/yulong/Desktop/BS/yyl/api-gateshield-core/docker/zookeeper/zoo.cfg:/conf/zoo.cfg zookeeper:3.4.13
+```
+

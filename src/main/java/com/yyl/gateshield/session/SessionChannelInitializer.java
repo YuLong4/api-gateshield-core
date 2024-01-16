@@ -19,12 +19,18 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
  * 通常, 会在 Netty 服务器端的启动过程中使用类似的初始化器来设置管道以正确处理传入的请求。
  */
 public class SessionChannelInitializer extends ChannelInitializer<SocketChannel> {
+    private final Configuration configuration;
+
+    public SessionChannelInitializer(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
         ChannelPipeline pipeline = channel.pipeline();
         pipeline.addLast(new HttpRequestDecoder());
         pipeline.addLast(new HttpResponseEncoder());
         pipeline.addLast(new HttpObjectAggregator(1024*1024));
-        pipeline.addLast(new SessionServerHandler());
+        pipeline.addLast(new SessionServerHandler(configuration));
     }
 }
