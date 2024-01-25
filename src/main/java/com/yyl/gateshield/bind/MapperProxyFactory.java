@@ -27,7 +27,6 @@ public class MapperProxyFactory {
 
     public IGenericReference newInstance(GatewaySession gatewaySession){
         return genericReferenceCache.computeIfAbsent(uri, k -> {
-
             HttpStatement httpStatement = gatewaySession.getConfiguration().getHttpStatement(uri);
 
             //泛化调用
@@ -38,7 +37,7 @@ public class MapperProxyFactory {
             interfaceMaker.add(new Signature(httpStatement.getMethodName(), Type.getType(String.class), new Type[]{Type.getType(String.class)}), null);
             Class<?> interfaceClass = interfaceMaker.create();
 
-            //代理对象
+            //代理对象 (用CGLib实现动态代理)
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(Object.class);
 

@@ -12,8 +12,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public abstract class BaseHandler<T> extends SimpleChannelInboundHandler<T> {
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, T t) throws Exception {
-        session(ctx, ctx.channel(), t);
+    protected void channelRead0(ChannelHandlerContext ctx, T msg) throws Exception {
+        session(ctx, ctx.channel(), msg);
     }
 
     protected abstract void session(ChannelHandlerContext ctx, final Channel channel, T request);

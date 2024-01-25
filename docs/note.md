@@ -58,3 +58,9 @@ docker run --name my-zookeeper -p 2181:2181 -d zookeeper:3.4.13
 docker run -d -p 2181:2181 --name my-zookeeper -v /Users/yulong/Desktop/BS/yyl/api-gateshield-core/docker/zookeeper/zoo.cfg:/conf/zoo.cfg zookeeper:3.4.13
 ```
 
+# 解决升级到JDK17后cglib报错Unable to make protected final java.lang.Class java.lang.ClassLoader.defineClass()
+启动报错Failed to create adaptive instance
+```
+运行程序的时候添加jvm参数
+--add-opens java.base/java.lang=ALL-UNNAMED
+```
