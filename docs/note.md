@@ -64,3 +64,12 @@ docker run -d -p 2181:2181 --name my-zookeeper -v /Users/yulong/Desktop/BS/yyl/a
 运行程序的时候添加jvm参数
 --add-opens java.base/java.lang=ALL-UNNAMED
 ```
+
+1月29日 2:00 
+1、发现在pom中去掉zookeeper的依赖，就可以正常启动并且连接zookeeper
+2、发现去掉zookeeper依赖后，使用dubbo直连方式测试成功，之前失败的原因是UserResDTO没有实现Serializable接口，但仍然出现
+Unable to make field final int java.math.BigInteger.signum accessible: module java.base does not "opens java.math" to unnamed module @244038d0
+报错
+解决方式
+使用jdk17编译运行dubbo 2.7.14项目
+添加运行参数--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED
