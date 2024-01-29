@@ -73,3 +73,11 @@ Unable to make field final int java.math.BigInteger.signum accessible: module ja
 解决方式
 使用jdk17编译运行dubbo 2.7.14项目
 添加运行参数--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED --add-opens java.base/java.math=ALL-UNNAMED
+
+
+1月29日 22:32重大发现
+原本的自己的项目可以成功连接zookeeper、但是别人的项目打开了连接不上（卡在default scheme，然后超时），发现只要在修改运行配置中将java版本选择java 1.8，
+即可成功运行并连接zookeeper，后续在解决如何修改项目默认为java 1.8。
+
+至此 dubbo的服务提供者、消费者问题都已试验成功（后续将例子上传到github中）
+zookeeper反复出现的连接问题也都得以解决
