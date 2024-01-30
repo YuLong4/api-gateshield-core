@@ -65,6 +65,7 @@ docker run -d -p 2181:2181 --name my-zookeeper -v /Users/yulong/Desktop/BS/yyl/a
 --add-opens java.base/java.lang=ALL-UNNAMED
 ```
 
+## 开发日志
 1月29日 2:00 
 1、发现在pom中去掉zookeeper的依赖，就可以正常启动并且连接zookeeper
 2、发现去掉zookeeper依赖后，使用dubbo直连方式测试成功，之前失败的原因是UserResDTO没有实现Serializable接口，但仍然出现
@@ -81,3 +82,7 @@ Unable to make field final int java.math.BigInteger.signum accessible: module ja
 
 至此 dubbo的服务提供者、消费者问题都已试验成功（后续将例子上传到github中）
 zookeeper反复出现的连接问题也都得以解决
+
+1月30日 14:56持续推进
+只要将项目的sdk java版本修改为1.8，语言级别修改为8，在设置-java编译器中将项目的目标字节码版本也改为8，这样就能成功连接zookeeper
+项目已经可以继续推进 TODO: 创建自己的dubbo服务提供者provider项目
