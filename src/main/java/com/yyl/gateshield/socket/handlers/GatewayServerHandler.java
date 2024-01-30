@@ -7,11 +7,14 @@ import com.yyl.gateshield.bind.IGenericReference;
 import com.yyl.gateshield.session.GatewaySession;
 import com.yyl.gateshield.session.defaults.DefaultGatewaySessionFactory;
 import com.yyl.gateshield.socket.BaseHandler;
+import com.yyl.gateshield.socket.agreement.RequestParser;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 
 /**
@@ -31,15 +34,20 @@ public class GatewayServerHandler extends BaseHandler<FullHttpRequest> {
     protected void session(ChannelHandlerContext ctx, final Channel channel, FullHttpRequest request) {
         logger.info("网关接收到请求 uri: {}, method: {}", request.uri(), request.method());
 
+        //解析请求参数
+        Map<String, Object> requestObj = new RequestParser(request).parse();
+
         //返回信息控制
         String uri = request.uri();
+        int idx = uri.indexOf("?");
+        uri = idx > 0 ? uri.substring(0, idx) : uri;
         if(uri.equals("/favicon.ico")){
             return;
         }
 
         GatewaySession gatewaySession = gatewaySessionFactory.openSession(uri);
         IGenericReference reference = gatewaySession.getMapper();
-        String result = reference.$invoke("test") + " " + System.currentTimeMillis();
+        String result = reference.$invoke(requestObj) + " " + System.currentTimeMillis();
 
         //配置返回信息response
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);

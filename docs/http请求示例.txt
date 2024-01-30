@@ -1,0 +1,18 @@
+DefaultHttpRequest(decodeResult: success, version: HTTP/1.1)
+GET /wg/activity/sayHi HTTP/1.1
+Host: localhost:7397
+Connection: keep-alive
+sec-ch-ua: "Not_A Brand";v="99", "Microsoft Edge";v="109", "Chromium";v="109"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.52
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
+Cookie: Idea-72246b0e=348456c6-91ab-4d30-a6e1-21944f9763c6; csrftoken=1koxqWP9g0gyUOP8HfPVVyD3xIAI9cAT; _pk_id.1.1fff=e2091110a4c0be72.1696840555.; Hm_lvt_8c8d73183929fe9e009a014e6f035f12=1698594635
+content-length: 0
