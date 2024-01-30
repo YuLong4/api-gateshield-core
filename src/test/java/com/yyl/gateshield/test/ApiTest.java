@@ -25,8 +25,8 @@ public class ApiTest {
         //1.创建配置信息加载注册
         Configuration configuration = new Configuration();
         HttpStatement httpStatement = new HttpStatement(
-                "api-gateshield-test",
-                "com.yyl.gateshield.rpc.IActivityBooth",
+                "api-gateway-test",
+                "cn.bugstack.gateway.rpc.IActivityBooth",
                 "sayHi",
                 "/wg/activity/sayHi",
                 HttpCommandType.GET
