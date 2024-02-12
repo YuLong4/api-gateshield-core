@@ -15,13 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * 这个 GenericReferenceRegistry 类是一个泛化调用注册中心，用于管理不同方法对应的 IGenericReference 实例。
- * 在 getGenericReference 方法中：
- * 通过传入的 methodName 从 knownGenericReferences 中获取相应的 GenericReferenceProxyFactory 实例。
- * 如果找不到对应 methodName 的 GenericReferenceProxyFactory，则抛出异常表示该类型未被注册。
- * 如果找到了相应的 GenericReferenceProxyFactory，则调用它的 newInstance 方法，该方法用于创建一个新的 IGenericReference 实例。
- * 最终返回创建的 IGenericReference 实例，这个实例可以执行对应方法的泛化调用。
- * 这个类的作用是提供一种中心化管理不同方法对应的泛化调用接口。通过在 knownGenericReferences 中注册不同的 GenericReferenceProxyFactory，可以动态地获取对应方法的 IGenericReference 实例，从而实现对不同方法的远程调用。
+ * 泛化调用注册器
  */
 public class MapperRegistry {
 

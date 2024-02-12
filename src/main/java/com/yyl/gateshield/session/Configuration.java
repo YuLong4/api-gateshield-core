@@ -2,6 +2,9 @@ package com.yyl.gateshield.session;
 
 import com.yyl.gateshield.bind.MapperRegistry;
 import com.yyl.gateshield.bind.IGenericReference;
+import com.yyl.gateshield.datasource.Connection;
+import com.yyl.gateshield.executor.Executor;
+import com.yyl.gateshield.executor.SimpleExecutor;
 import com.yyl.gateshield.mapping.HttpStatement;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
@@ -30,7 +33,8 @@ public class Configuration {
     public Configuration(){
         //TODO 后期从配置中获取
         ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("api-gateshield-test");
+//        applicationConfig.setName("api-gateshield-test");
+        applicationConfig.setName("api-gateway-test");
         applicationConfig.setQosEnable(false);
 
         RegistryConfig registryConfig = new RegistryConfig();
@@ -38,13 +42,17 @@ public class Configuration {
         registryConfig.setRegister(false);
 
         ReferenceConfig<GenericService> referenceConfig = new ReferenceConfig<>();
-        referenceConfig.setInterface("com.yyl.gateshield.rpc.IActivityBooth");
+//        referenceConfig.setInterface("com.yyl.gateshield.rpc.IActivityBooth");
+        referenceConfig.setInterface("cn.bugstack.gateway.rpc.IActivityBooth");
         referenceConfig.setVersion("1.0.0");
         referenceConfig.setGeneric("true");
 
-        applicationConfigMap.put("api-gateshield-test", applicationConfig);
-        registryConfigMap.put("api-gateshield-test", registryConfig);
-        referenceConfigMap.put("com.yyl.gateshield.rpc.IActivityBooth", referenceConfig);
+//        applicationConfigMap.put("api-gateshield-test", applicationConfig);
+        applicationConfigMap.put("api-gateway-test", applicationConfig);
+//        registryConfigMap.put("api-gateshield-test", registryConfig);
+        registryConfigMap.put("api-gateway-test", registryConfig);
+//        referenceConfigMap.put("com.yyl.gateshield.rpc.IActivityBooth", referenceConfig);
+        referenceConfigMap.put("cn.bugstack.gateway.rpc.IActivityBooth", referenceConfig);
     }
 
     public ApplicationConfig getApplicationConfig(String applicationName){
@@ -73,5 +81,9 @@ public class Configuration {
 
     public HttpStatement getHttpStatement(String uri){
         return httpStatements.get(uri);
+    }
+
+    public Executor newExecutor(Connection connection) {
+        return new SimpleExecutor(this, connection);
     }
 }

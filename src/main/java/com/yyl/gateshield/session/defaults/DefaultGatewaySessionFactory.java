@@ -3,6 +3,7 @@ package com.yyl.gateshield.session.defaults;
 import com.yyl.gateshield.datasource.DataSource;
 import com.yyl.gateshield.datasource.DataSourceFactory;
 import com.yyl.gateshield.datasource.unpooled.UnpooledDataSourceFactory;
+import com.yyl.gateshield.executor.Executor;
 import com.yyl.gateshield.session.Configuration;
 import com.yyl.gateshield.session.GatewaySession;
 import com.yyl.gateshield.session.GatewaySessionFactory;
@@ -25,6 +26,9 @@ public class DefaultGatewaySessionFactory implements GatewaySessionFactory {
         dataSourceFactory.setProperties(configuration, uri);
         DataSource dataSource = dataSourceFactory.getDataSource();
 
-        return new DefaultGatewaySession(configuration, uri, dataSource);
+        // 创建执行器
+        Executor executor = configuration.newExecutor(dataSource.getConnection());
+        // 创建会话: DefaultGatewaySession
+        return new DefaultGatewaySession(configuration, uri, executor);
     }
 }

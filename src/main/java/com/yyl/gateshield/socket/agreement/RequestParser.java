@@ -25,13 +25,24 @@ public class RequestParser {
         this.request = request;
     }
 
-    public Map<String, Object> parse(){
-        //获取contentType
-        String contentType = getContentType();
+    /**
+     * 简单处理请求路径
+     */
+    public String getUri(){
+        String uri = request.uri();
+        int idx = uri.indexOf("?");
+        uri = idx > 0 ? uri.substring(0, idx) : uri;
+        if (uri.equals("/favicon.ico"))
+            return null;
+        return uri;
+    }
 
+    /**
+     * 解析封装请求参数
+     */
+    public Map<String, Object> parse(){
         //获取请求类型
         HttpMethod method = request.method();
-
         if (method == HttpMethod.GET){
             Map<String, Object> parameterMap = new HashMap<>();
             QueryStringDecoder decoder = new QueryStringDecoder(request.uri());
@@ -40,6 +51,7 @@ public class RequestParser {
             );
             return parameterMap;
         } else if (method == HttpMethod.POST){
+            String contentType = getContentType();
             switch (contentType){
                 case "multipart/form-data":
                     Map<String, Object> parameterMap = new HashMap<>();
@@ -64,6 +76,8 @@ public class RequestParser {
                         return JSON.parseObject(content);
                     }
                     break;
+                case "none":
+                    return new HashMap<>();
                 default:
                     throw new RuntimeException("未实现的协议类型 Content-Type：" + contentType);
             }
@@ -77,17 +91,17 @@ public class RequestParser {
         ).findAny();
 
         Map.Entry<String, String> entry = header.orElse(null);
-        assert entry != null;
-
+        if (entry == null)
+            return "none";
         // application/json、multipart/form-data;
         String contentType = entry.getValue();
         int idx = contentType.indexOf(";");
-
-        if (idx > 0){
-            return contentType.substring(0, idx);
-        } else {
-            return contentType;
-        }
+//        if (idx > 0){
+//            return contentType.substring(0, idx);
+//        } else {
+//            return contentType;
+//        }
+        return idx > 0 ? contentType.substring(0, idx) : contentType;
     }
 
 }
