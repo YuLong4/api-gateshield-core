@@ -36,13 +36,25 @@ public class ApiTest {
     public void test_gateway() throws ExecutionException, InterruptedException {
         //1.创建配置信息加载注册
         Configuration configuration = new Configuration();
-//        HttpStatement httpStatement = new HttpStatement(
-//                "api-gateshield-test",
-//                "com.yyl.gateshield.rpc.IActivityBooth",
-//                "sayHi",
-//                "/wg/activity/sayHi",
-//                HttpCommandType.GET
-//        );
+        HttpStatement httpStatement01 = new HttpStatement(
+                "api-gateshield-test",
+                "com.yyl.gateshield.rpc.IActivityBooth",
+                "sayHi",
+                "java.lang.String",
+                "/wg/activity/sayHi",
+                HttpCommandType.GET
+        );
+
+        HttpStatement httpStatement02 = new HttpStatement(
+                "api-gateshield-test",
+                "com.yyl.gateshield.rpc.IActivityBooth",
+                "insert",
+                "com.yyl.gateshield.rpc.dto.XReq",
+                "/wg/activity/insert",
+                HttpCommandType.POST
+        );
+
+        /*
         HttpStatement httpStatement01 = new HttpStatement(
                 "api-gateway-test",
                 "cn.bugstack.gateway.rpc.IActivityBooth",
@@ -58,6 +70,7 @@ public class ApiTest {
                 "cn.bugstack.gateway.rpc.dto.XReq",
                 "/wg/activity/insert",
                 HttpCommandType.POST);
+        */
 
         configuration.addMapper(httpStatement01);
         configuration.addMapper(httpStatement02);
