@@ -36,13 +36,16 @@ public class ApiTest {
     public void test_gateway() throws ExecutionException, InterruptedException {
         //1.创建配置信息加载注册
         Configuration configuration = new Configuration();
+        configuration.registryConfig("api-gateshield-test", "zookeeper://127.0.0.1:2181", "com.yyl.gateshield.rpc.IActivityBooth", "1.0.0");
+
         HttpStatement httpStatement01 = new HttpStatement(
                 "api-gateshield-test",
                 "com.yyl.gateshield.rpc.IActivityBooth",
                 "sayHi",
                 "java.lang.String",
                 "/wg/activity/sayHi",
-                HttpCommandType.GET
+                HttpCommandType.GET,
+                false
         );
 
         HttpStatement httpStatement02 = new HttpStatement(
@@ -51,7 +54,8 @@ public class ApiTest {
                 "insert",
                 "com.yyl.gateshield.rpc.dto.XReq",
                 "/wg/activity/insert",
-                HttpCommandType.POST
+                HttpCommandType.POST,
+                true
         );
 
         /*
@@ -79,7 +83,7 @@ public class ApiTest {
         DefaultGatewaySessionFactory gatewaySessionFactory = new DefaultGatewaySessionFactory(configuration);
 
         //3.创建启动网关网络服务
-        GatewaySocketServer server = new GatewaySocketServer(gatewaySessionFactory);
+        GatewaySocketServer server = new GatewaySocketServer(configuration, gatewaySessionFactory);
 
         Future<Channel> future = Executors.newFixedThreadPool(2).submit(server);
         Channel channel = future.get();

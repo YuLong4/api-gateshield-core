@@ -1,5 +1,7 @@
 package com.yyl.gateshield.session;
 
+import com.yyl.gateshield.authorization.IAuth;
+import com.yyl.gateshield.authorization.auth.AuthorizeService;
 import com.yyl.gateshield.bind.MapperRegistry;
 import com.yyl.gateshield.bind.IGenericReference;
 import com.yyl.gateshield.datasource.Connection;
@@ -23,6 +25,8 @@ public class Configuration {
 
     private final Map<String, HttpStatement> httpStatements = new HashMap<>();
 
+    private final IAuth auth = new AuthorizeService();
+
     //RPC应用服务配置项 api-gateshield-test
     private final Map<String, ApplicationConfig> applicationConfigMap = new HashMap<>();
     //RPC注册中心配置项 zookeeper://127.0.0.1:2181
@@ -31,28 +35,30 @@ public class Configuration {
     private final Map<String, ReferenceConfig<GenericService>> referenceConfigMap = new HashMap<>();
 
     public Configuration(){
-        //TODO 后期从配置中获取
-        ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("api-gateshield-test");
-//        applicationConfig.setName("api-gateway-test");
-        applicationConfig.setQosEnable(false);
+    }
 
-        RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("zookeeper://127.0.0.1:2181");
-        registryConfig.setRegister(false);
+    public synchronized void registryConfig(String applicationName, String address, String interfaceName, String version){
+        if(applicationConfigMap.get(applicationName) == null) {
+            ApplicationConfig application = new ApplicationConfig();
+            application.setName(applicationName);
+            application.setQosEnable(false);
+            applicationConfigMap.put(applicationName, application);
+        }
 
-        ReferenceConfig<GenericService> referenceConfig = new ReferenceConfig<>();
-        referenceConfig.setInterface("com.yyl.gateshield.rpc.IActivityBooth");
-//        referenceConfig.setInterface("cn.bugstack.gateway.rpc.IActivityBooth");
-        referenceConfig.setVersion("1.0.0");
-        referenceConfig.setGeneric("true");
+        if(registryConfigMap.get(applicationName) == null) {
+            RegistryConfig registry = new RegistryConfig();
+            registry.setAddress(address);
+            registry.setRegister(false);
+            registryConfigMap.put(applicationName, registry);
+        }
 
-        applicationConfigMap.put("api-gateshield-test", applicationConfig);
-//        applicationConfigMap.put("api-gateway-test", applicationConfig);
-        registryConfigMap.put("api-gateshield-test", registryConfig);
-//        registryConfigMap.put("api-gateway-test", registryConfig);
-        referenceConfigMap.put("com.yyl.gateshield.rpc.IActivityBooth", referenceConfig);
-//        referenceConfigMap.put("cn.bugstack.gateway.rpc.IActivityBooth", referenceConfig);
+        if(referenceConfigMap.get(interfaceName) == null) {
+            ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
+            reference.setInterface(interfaceName);
+            reference.setVersion(version);
+            reference.setGeneric("true");
+            referenceConfigMap.put(interfaceName, reference);
+        }
     }
 
     public ApplicationConfig getApplicationConfig(String applicationName){
@@ -85,5 +91,9 @@ public class Configuration {
 
     public Executor newExecutor(Connection connection) {
         return new SimpleExecutor(this, connection);
+    }
+
+    public boolean authValidate(String uId, String token) {
+        return auth.validate(uId, token);
     }
 }

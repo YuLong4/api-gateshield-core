@@ -1,6 +1,6 @@
 package com.yyl.gateshield.executor;
 
-import com.yyl.gateshield.executor.result.GatewayResult;
+import com.yyl.gateshield.executor.result.SessionResult;
 import com.yyl.gateshield.mapping.HttpStatement;
 
 import java.util.Map;
@@ -10,6 +10,6 @@ import java.util.Map;
  */
 public interface Executor {
 
-    GatewayResult exec(HttpStatement httpStatement, Map<String, Object> params) throws Exception;
+    SessionResult exec(HttpStatement httpStatement, Map<String, Object> params) throws Exception;
 
 }

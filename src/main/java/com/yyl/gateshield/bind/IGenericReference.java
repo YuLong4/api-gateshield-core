@@ -1,5 +1,7 @@
 package com.yyl.gateshield.bind;
 
+import com.yyl.gateshield.executor.result.SessionResult;
+
 import java.util.Map;
 
 /**
@@ -7,6 +9,6 @@ import java.util.Map;
  */
 public interface IGenericReference {
     //$是函数名的一部分
-    Object $invoke(Map<String, Object> params);
+    SessionResult $invoke(Map<String, Object> params);
 
 }

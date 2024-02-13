@@ -1,5 +1,8 @@
 package com.yyl.gateshield.mapping;
 
+/**
+ * 网关接口映射信息
+ */
 public class HttpStatement {
 
     /** 应用名称 */
@@ -20,13 +23,17 @@ public class HttpStatement {
     /** 接口类型: GET POST PUT DELETE*/
     private HttpCommandType httpCommandType;
 
-    public HttpStatement(String application, String interfaceName, String methodName, String parameterType, String uri, HttpCommandType httpCommandType) {
+    /** 是否鉴权 */
+    private boolean auth;
+
+    public HttpStatement(String application, String interfaceName, String methodName, String parameterType, String uri, HttpCommandType httpCommandType, boolean auth) {
         this.application = application;
         this.interfaceName = interfaceName;
         this.methodName = methodName;
         this.parameterType = parameterType;
         this.uri = uri;
         this.httpCommandType = httpCommandType;
+        this.auth = auth;
     }
 
     public String getApplication() {
@@ -51,5 +58,9 @@ public class HttpStatement {
 
     public HttpCommandType getHttpCommandType() {
         return httpCommandType;
+    }
+
+    public boolean isAuth(){
+        return auth;
     }
 }
