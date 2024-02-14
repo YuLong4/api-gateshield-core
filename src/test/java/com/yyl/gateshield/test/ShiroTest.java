@@ -33,7 +33,7 @@ public class ShiroTest {
     }
 
     /**
-     * 对指定字符串进行jwt编码和解码示例
+     * 对指定字符串进行jwt编码和解码
      */
     @Test
     public void test_awt(){
