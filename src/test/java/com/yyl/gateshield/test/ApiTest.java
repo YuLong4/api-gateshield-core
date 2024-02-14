@@ -58,24 +58,6 @@ public class ApiTest {
                 true
         );
 
-        /*
-        HttpStatement httpStatement01 = new HttpStatement(
-                "api-gateway-test",
-                "cn.bugstack.gateway.rpc.IActivityBooth",
-                "sayHi",
-                "java.lang.String",
-                "/wg/activity/sayHi",
-                HttpCommandType.GET);
-
-        HttpStatement httpStatement02 = new HttpStatement(
-                "api-gateway-test",
-                "cn.bugstack.gateway.rpc.IActivityBooth",
-                "insert",
-                "cn.bugstack.gateway.rpc.dto.XReq",
-                "/wg/activity/insert",
-                HttpCommandType.POST);
-        */
-
         configuration.addMapper(httpStatement01);
         configuration.addMapper(httpStatement02);
 
