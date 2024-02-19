@@ -1,8 +1,8 @@
 package com.yyl.gateshield.test;
 
-import com.yyl.gateshield.authorization.IAuth;
-import com.yyl.gateshield.authorization.JwtUtil;
-import com.yyl.gateshield.authorization.auth.AuthorizeService;
+import com.yyl.gateshield.core.authorization.IAuth;
+import com.yyl.gateshield.core.authorization.JwtUtil;
+import com.yyl.gateshield.core.authorization.auth.AuthorizeService;
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

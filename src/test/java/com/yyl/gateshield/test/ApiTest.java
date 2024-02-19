@@ -1,10 +1,10 @@
 package com.yyl.gateshield.test;
 
-import com.yyl.gateshield.mapping.HttpCommandType;
-import com.yyl.gateshield.mapping.HttpStatement;
-import com.yyl.gateshield.session.Configuration;
-import com.yyl.gateshield.session.defaults.DefaultGatewaySessionFactory;
-import com.yyl.gateshield.socket.GatewaySocketServer;
+import com.yyl.gateshield.core.mapping.HttpCommandType;
+import com.yyl.gateshield.core.mapping.HttpStatement;
+import com.yyl.gateshield.core.session.Configuration;
+import com.yyl.gateshield.core.session.defaults.DefaultGatewaySessionFactory;
+import com.yyl.gateshield.core.socket.GatewaySocketServer;
 import io.netty.channel.Channel;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -36,6 +36,30 @@ public class ApiTest {
     public void test_gateway() throws ExecutionException, InterruptedException {
         //1.创建配置信息加载注册
         Configuration configuration = new Configuration();
+        configuration.setHostName("127.0.0.1");
+        configuration.setPort(7397);
+
+        //2.基于配置构建会话工厂
+        DefaultGatewaySessionFactory gatewaySessionFactory = new DefaultGatewaySessionFactory(configuration);
+
+        //3.创建启动网关网络服务
+        GatewaySocketServer server = new GatewaySocketServer(configuration, gatewaySessionFactory);
+
+        Future<Channel> future = Executors.newFixedThreadPool(2).submit(server);
+        Channel channel = future.get();
+
+        if (channel == null) {
+            throw new RuntimeException("netty server start error : channel is null");
+        }
+
+        while (!channel.isActive()){
+            logger.info("netty server gateway starting ...");
+            Thread.sleep(500);
+        }
+
+        logger.info("netty server gateway start Done! {}", channel.localAddress());
+
+        //注册接口
         configuration.registryConfig("api-gateshield-test", "zookeeper://127.0.0.1:2181", "com.yyl.gateshield.rpc.IActivityBooth", "1.0.0");
 
         HttpStatement httpStatement01 = new HttpStatement(
@@ -60,26 +84,6 @@ public class ApiTest {
 
         configuration.addMapper(httpStatement01);
         configuration.addMapper(httpStatement02);
-
-        //2.基于配置构建会话工厂
-        DefaultGatewaySessionFactory gatewaySessionFactory = new DefaultGatewaySessionFactory(configuration);
-
-        //3.创建启动网关网络服务
-        GatewaySocketServer server = new GatewaySocketServer(configuration, gatewaySessionFactory);
-
-        Future<Channel> future = Executors.newFixedThreadPool(2).submit(server);
-        Channel channel = future.get();
-
-        if (channel == null) {
-            throw new RuntimeException("netty server start error : channel is null");
-        }
-
-        while (!channel.isActive()){
-            logger.info("netty server gateway starting ...");
-            Thread.sleep(500);
-        }
-
-        logger.info("netty server gateway start Done! {}", channel.localAddress());
 
         Thread.sleep(Long.MAX_VALUE);
     }
