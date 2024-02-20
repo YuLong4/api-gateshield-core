@@ -49,7 +49,7 @@ public class GatewaySocketServer implements Callable<Channel> {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childHandler(new GatewayChannelInitializer(configuration, gatewaySessionFactory));
-            channelFuture = b.bind(new InetSocketAddress(configuration.getHostName(), configuration.getPort())).syncUninterruptibly();
+            channelFuture = b.bind(configuration.getPort()).syncUninterruptibly();
             this.channel = channelFuture.channel();
         } catch (Exception e) {
             logger.error("socket server start error", e);
