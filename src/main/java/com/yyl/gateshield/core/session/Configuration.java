@@ -12,6 +12,8 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +22,8 @@ import java.util.Map;
  * 会话生命周期配置项
  */
 public class Configuration {
+
+    private Logger logger = LoggerFactory.getLogger(Configuration.class);
 
     //网关 Netty 服务地址
     private String hostName = "127.0.0.1";
@@ -48,26 +52,35 @@ public class Configuration {
     }
 
     public synchronized void registryConfig(String applicationName, String address, String interfaceName, String version){
+        logger.info("site 1");
         if(applicationConfigMap.get(applicationName) == null) {
+            logger.info("site 2");
             ApplicationConfig application = new ApplicationConfig();
             application.setName(applicationName);
             application.setQosEnable(false);
             applicationConfigMap.put(applicationName, application);
+            logger.info("已添加" + applicationConfigMap.get(applicationName));
         }
 
         if(registryConfigMap.get(applicationName) == null) {
+            logger.info("site 3");
             RegistryConfig registry = new RegistryConfig();
             registry.setAddress(address);
             registry.setRegister(false);
             registryConfigMap.put(applicationName, registry);
+            logger.info("已添加" + registryConfigMap.get(applicationName));
         }
 
         if(referenceConfigMap.get(interfaceName) == null) {
+            logger.info("site 4");
             ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
+            logger.info("上面一行是出错点");
             reference.setInterface(interfaceName);
             reference.setVersion(version);
             reference.setGeneric("true");
+            logger.info("添加前");
             referenceConfigMap.put(interfaceName, reference);
+            logger.info("已添加" + referenceConfigMap.get(interfaceName));
         }
     }
 

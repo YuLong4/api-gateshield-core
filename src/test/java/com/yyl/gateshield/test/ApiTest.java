@@ -6,6 +6,8 @@ import com.yyl.gateshield.core.session.Configuration;
 import com.yyl.gateshield.core.session.defaults.DefaultGatewaySessionFactory;
 import com.yyl.gateshield.core.socket.GatewaySocketServer;
 import io.netty.channel.Channel;
+import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.rpc.service.GenericService;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,5 +88,11 @@ public class ApiTest {
         configuration.addMapper(httpStatement02);
 
         Thread.sleep(Long.MAX_VALUE);
+    }
+
+    @Test
+    public void test(){
+        ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
+        System.out.println(reference);
     }
 }

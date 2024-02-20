@@ -10,9 +10,13 @@ import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class UnpooledDataSource implements DataSource {
+
+    private Logger logger = LoggerFactory.getLogger(UnpooledDataSource.class);
 
     private Configuration configuration;
     private HttpStatement httpStatement;
@@ -25,6 +29,7 @@ public class UnpooledDataSource implements DataSource {
                 // TODO 预留接口
                 break;
             case Dubbo:
+                logger.info("switch case Dubbo");
                 //配置信息
                 String application = httpStatement.getApplication();
                 String interfaceName = httpStatement.getInterfaceName();
@@ -32,6 +37,7 @@ public class UnpooledDataSource implements DataSource {
                 ApplicationConfig applicationConfig = configuration.getApplicationConfig(application);
                 RegistryConfig registryConfig = configuration.getRegistryConfig(application);
                 ReferenceConfig<GenericService> refence = configuration.getReferenceConfig(interfaceName);
+                logger.info("获取Duddo连接");
                 return new DubboConnection(applicationConfig, registryConfig, refence);
             default:
                 break;
