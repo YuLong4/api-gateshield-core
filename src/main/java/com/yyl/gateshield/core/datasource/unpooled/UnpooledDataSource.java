@@ -29,7 +29,7 @@ public class UnpooledDataSource implements DataSource {
                 // TODO 预留接口
                 break;
             case Dubbo:
-                logger.info("switch case Dubbo");
+                logger.info("case: Dubbo, 目标为Dubbo服务");
                 //配置信息
                 String application = httpStatement.getApplication();
                 String interfaceName = httpStatement.getInterfaceName();
@@ -37,7 +37,6 @@ public class UnpooledDataSource implements DataSource {
                 ApplicationConfig applicationConfig = configuration.getApplicationConfig(application);
                 RegistryConfig registryConfig = configuration.getRegistryConfig(application);
                 ReferenceConfig<GenericService> refence = configuration.getReferenceConfig(interfaceName);
-                logger.info("获取Duddo连接");
                 return new DubboConnection(applicationConfig, registryConfig, refence);
             default:
                 break;
